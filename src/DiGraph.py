@@ -73,8 +73,10 @@ class DiGraph(GraphInterface):
         elif node_id2 not in self.all_out_edges_of_node(node_id1).keys():
             return False
         else:
-            del self.nodes.get(node_id1).get_edges_from_node[node_id2]
-            del self.nodes.get(node_id2).get_edges_to_node[node_id1]
+            print(self.nodes.get(node_id1).get_edges_from_node())
+            del self.nodes.get(node_id1).get_edges_from_node()[node_id2]
+            del self.nodes.get(node_id2).get_edges_to_node()[node_id1]
+            print(self.nodes.get(node_id1).get_edges_from_node())
             self.edge_size -= 1
             self.mc += 1
             return True
