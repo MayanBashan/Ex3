@@ -129,14 +129,16 @@ class DiGraph(GraphInterface):
         if node_id not in self.nodes.keys():
             return False
         else:
-            neighbors_to_node = self.all_in_edges_of_node(node_id).keys()
-            for ni_key in neighbors_to_node:
-                self.remove_edge(ni_key, node_id)
-
-            neighbors_from_node = self.all_out_edges_of_node(node_id).keys()
-            for ni_key in neighbors_from_node:
-                self.remove_edge(node_id, ni_key)
-
+            neighbors_to_node = []
+            neighbors_to_node.extend(self.all_in_edges_of_node(node_id).keys())
+            if neighbors_to_node:
+                for ni_key in neighbors_to_node:
+                    self.remove_edge(ni_key, node_id)
+            neighbors_from_node = []
+            neighbors_from_node.extend(self.all_out_edges_of_node(node_id).keys())
+            if neighbors_from_node:
+                for ni_key in neighbors_from_node:
+                    self.remove_edge(node_id, ni_key)
             del self.nodes[node_id]
             self.mc += 1
             return True
