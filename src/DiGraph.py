@@ -163,3 +163,16 @@ class DiGraph(GraphInterface):
             self.edge_size -= 1
             self.mc += 1
             return True
+
+    def __eq__(self, other):
+        for node_key in self.nodes.keys():
+            if node_key not in other.nodes.keys():
+                return False
+            else:
+                 if self.all_out_edges_of_node(node_key) != other.all_out_edges_of_node(node_key):
+                    return False
+        return True
+
+
+
+
