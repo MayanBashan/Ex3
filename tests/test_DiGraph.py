@@ -1,20 +1,19 @@
 import unittest
 from DiGraph import DiGraph
 
-"""Test Class for DiGraph
-List of all the test in this Test class:
- - test_v_size - adding nodes to the graph and checks if graph.v_size() returns the correct number of nodes in the graph
- - test_e_size - connect nodes in the graph and checks if graph.edge_size returns the correct number of edges in the graph
- - test_get_all_v - checks if graph.get_all_v returns a dictionary of all nodes in the graph
- - test_all_in_edges_of_node - checks that all_in_edges_of_node method returns all edges that come into the current node 
- - test_all_out_edges_of_node - checks that all_out_edges_of_node method returns all edges that comes out of current node 
- - test_get_mc - checks that number of operations that are made on the graph equals to mc of the graph
- - test_add_remove_node - checks if a node is being added or removed from the graph successfully
- - test_add_remove_edge - checks if an edge is being added or removed from the graph successfully
-"""
-
 
 class TestDiGraph(unittest.TestCase):
+    """Test Class for DiGraph
+    List of all the test in this Test class:
+    - test_v_size - adding nodes to the graph and checks if graph.v_size() returns the correct number of nodes in the graph
+    - test_e_size - connect nodes in the graph and checks if graph.edge_size returns the correct number of edges in the graph
+    - test_get_all_v - checks if graph.get_all_v returns a dictionary of all nodes in the graph
+    - test_all_in_edges_of_node - checks that all_in_edges_of_node method returns all edges that come into the current node
+    - test_all_out_edges_of_node - checks that all_out_edges_of_node method returns all edges that comes out of current node
+    - test_get_mc - checks that number of operations that are made on the graph equals to mc of the graph
+    - test_add_remove_node - checks if a node is being added or removed from the graph successfully
+    - test_add_remove_edge - checks if an edge is being added or removed from the graph successfully
+    """
 
     def test_v_size(self):
         graph = DiGraph()
