@@ -1,5 +1,5 @@
+import unittest
 from unittest import TestCase
-
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
 
@@ -8,12 +8,17 @@ class TestGraphAlgo(TestCase):
     """Test Class for DiGraph
     List of all the test in this Test class:
     - test_get_graph - checks if the simple method get_graph returns the algo_graph graph
-    - test_load_from_json -
-    - test_save_to_json -
+    - test_saveNload_to_json - creates a graph with 6 nodes and 11 edges, save it to a file, load it back to another graph algo and see if both graph's are equal
     - test_shortest_path - checks if the shortest_path method returns the path from src to dest with the smallest dist between them
-    - test_connected_component -
-    - test_connected_components -
-    - test_plot_graph -
+    - test_connected_component1 - adding 5 nodes: add 7 edges, when node 4 is not connected to any other node, checks connected component on node 4 -> return [4]
+                                  checks connected_component on node 2 -> returns all nodes except 4: [0,1,2,3]
+                                  removes 2 edges - now connected component of 2 -> return: [2,3]
+    - test_connected_component2 - adding 5 nodes and connected them all, now connected component of 2 -> reurns all nodes: [0,1,2,3,4]
+    - test_connected_component3 - checks connected component for a node 1 when graph is empty, and when there is no node 1 in graph: returns []
+    - test_connected_components1 - adding 5 nodes to a graph and some edges, checks if connected_components returns correct list of lists
+                                   it checks also when all nodes are connected -> returns [[0,1,2,3,4]]
+    - test_connected_components2 - adding 5 nodes to the graph (no edges), checks connected_components - there are 5 -> returns [[0],[1],[2],[3],[4]]
+    - test_connected_components3 - checks connected_components on an empty graph -> returns []
     """
 
     def test_get_graph(self):
@@ -23,12 +28,28 @@ class TestGraphAlgo(TestCase):
         graph_algo = GraphAlgo(graph)
         self.assertEqual(graph_algo.get_graph(), graph)
 
-
-    def test_load_from_json(self):
-        self.fail()
-
-    def test_save_to_json(self):
-        self.fail()
+    def test_saveNload_to_json(self):
+        graph = DiGraph()
+        for i in range(0,6):
+            graph.add_node(i)
+        graph.add_edge(0,1,2)
+        graph.add_edge(1,0,1)
+        graph.add_edge(1,3,3)
+        graph.add_edge(1,2,8)
+        graph.add_edge(1,5,10)
+        graph.add_edge(2,1,1)
+        graph.add_edge(2,4,3)
+        graph.add_edge(3,0,1)
+        graph.add_edge(3,1,1)
+        graph.add_edge(3,4,2)
+        graph.add_edge(4,5,2)
+        graph_algo = GraphAlgo(graph)
+        graph_algo.save_to_json(r'..\data\new')
+        graph_algo2 = GraphAlgo()
+        graph_algo2.load_from_json(r'..\data\new')
+        self.assertTrue(graph_algo.graph.__eq__(graph_algo2.graph))
+        graph = DiGraph()
+        graph_algo3 = GraphAlgo(graph)
 
     def test_shortest_path(self):
         graph = DiGraph()
@@ -40,34 +61,98 @@ class TestGraphAlgo(TestCase):
         graph.add_edge(3,1,1)
         graph_algo = GraphAlgo(graph)
         comp_path = [0, 2, 3, 1]
-        expected = [8, comp_path]
+        expected = (8, comp_path)
         self.assertEqual(graph_algo.shortest_path(0,1), expected)
-        expected = [0, [0]]
+        expected = (0, [0])
         self.assertEqual(graph_algo.shortest_path(0,0), expected)
-        expected = [float('inf'), []]
+        expected = (float('inf'), [])
         self.assertEqual(graph_algo.shortest_path(2,4), expected)
         self.assertEqual(graph_algo.shortest_path(1,0), expected)
 
-    def test_connected_component(self):
-        self.fail()
+    def test_connected_component1(self):
+        graph = DiGraph()
+        for i in range(0, 5):
+            graph.add_node(i)
+        graph.add_edge(0, 1, 10)
+        graph.add_edge(0, 2, 3)
+        graph.add_edge(2, 0, 3)
+        graph.add_edge(2, 3, 4)
+        graph.add_edge(3, 2, 4)
+        graph.add_edge(3, 1, 1)
+        graph.add_edge(1, 3, 1)
+        graph_algo = GraphAlgo(graph)
+        expected = [4]
+        self.assertEqual(graph_algo.connected_component(4), expected)
+        self.assertTrue(set(graph_algo.connected_component(2)) == set([0,1,2,3]))
+        graph.remove_edge(2, 0)
+        graph.remove_edge(1, 3)
+        self.assertTrue(set(graph_algo.connected_component(2)) == set([2,3]))
 
-    def test_connected_components(self):
-        self.fail()
+    def test_connected_component2(self):
+        graph = DiGraph()
+        for i in range(0, 5):
+            graph.add_node(i)
+        graph.add_edge(0, 1, 10)
+        graph.add_edge(0, 2, 3)
+        graph.add_edge(2, 0, 3)
+        graph.add_edge(2, 3, 4)
+        graph.add_edge(3, 2, 4)
+        graph.add_edge(3, 1, 1)
+        graph.add_edge(1, 3, 1)
+        graph.add_edge(1, 4, 1)
+        graph.add_edge(4, 1, 1)
+        graph_algo = GraphAlgo(graph)
+        expected = [0, 1, 4, 3, 2]
+        self.assertTrue(set(graph_algo.connected_component(2)) == set(expected))
 
-    def test_plot_graph(self):
-        self.fail()
+    def test_connected_component3(self):
+        graph = DiGraph()
+        graph_algo = GraphAlgo(graph)
+        self.assertEqual(graph_algo.connected_component(1), [])
+        graph.add_node(2)
+        graph_algo = GraphAlgo(graph)
+        self.assertEqual(graph_algo.connected_component(1), [])
+
+    def test_connected_components1(self):
+        graph = DiGraph()
+        for i in range(0, 5):
+            graph.add_node(i)
+        graph.add_edge(0, 1, 10)
+        graph.add_edge(0, 2, 3)
+        graph.add_edge(2, 0, 3)
+        graph.add_edge(2, 3, 4)
+        graph.add_edge(3, 2, 4)
+        graph.add_edge(3, 1, 1)
+        graph.add_edge(1, 3, 1)
+        graph_algo = GraphAlgo(graph)
+        expected = [[0,1,2,3],[4]]
+        self.assertEqual(graph_algo.connected_components(), expected)
+        graph.add_edge(4,1,1)
+        graph_algo = GraphAlgo(graph)
+        expected = [[0,1,2,3],[4]]
+        self.assertEqual(graph_algo.connected_components(), expected)
+        graph.add_edge(1,4,3.5)
+        graph_algo = GraphAlgo(graph)
+        expected = [[0, 1, 2, 3, 4]]
+        self.assertEqual(graph_algo.connected_components(), expected)
+
+    def test_connected_components2(self):
+        graph = DiGraph()
+        for i in range(0, 5):
+            graph.add_node(i)
+        graph_algo = GraphAlgo(graph)
+        expected = [[0],[1],[2],[3],[4]]
+        self.assertEqual(graph_algo.connected_components(), expected)
+
+    def test_connected_components3(self):
+        graph = DiGraph()
+        graph_algo = GraphAlgo(graph)
+        self.assertEqual(graph_algo.connected_components(), [])
+
+    # def test_plot_graph(self):
+    #     self.fail()
+
+
 if __name__ == '__main__':
-    # string = r'C:\Users\Mayan\PycharmProjects\Ex3\data\A5'
-    # graph = DiGraph()
-    # g_algo = GraphAlgo(graph)
-    # g_algo.load_from_json(string)
-    # print(g_algo.graph)
-    graph = DiGraph()
-    for i in range(0, 5):
-        graph.add_node(i,(3, 5))
-    graph.add_edge(0, 1, 10)
-    graph.add_edge(0, 2, 3)
-    graph.add_edge(2, 3, 4)
-    graph.add_edge(3, 1, 1)
-    graph_algo = GraphAlgo(graph)
-    graph_algo.save_to_json(r'C:\Users\Mayan\PycharmProjects\Ex3\data\new')
+    unittest.main()
+
