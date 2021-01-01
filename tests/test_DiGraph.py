@@ -13,6 +13,7 @@ List of all the test in this Test class:
  - test_add_remove_edge - checks if an edge is being added or removed from the graph successfully
 """
 
+
 class TestDiGraph(unittest.TestCase):
 
     def test_v_size(self):
@@ -147,7 +148,6 @@ class TestDiGraph(unittest.TestCase):
         expected_dict = {4 : 3}
         self.assertEqual(graph.all_out_edges_of_node(1), expected_dict)
 
+
 if __name__ == '__main__':
     unittest.main()
-
-
