@@ -56,3 +56,18 @@ class TestGraphAlgo(TestCase):
 
     def test_plot_graph(self):
         self.fail()
+if __name__ == '__main__':
+    # string = r'C:\Users\Mayan\PycharmProjects\Ex3\data\A5'
+    # graph = DiGraph()
+    # g_algo = GraphAlgo(graph)
+    # g_algo.load_from_json(string)
+    # print(g_algo.graph)
+    graph = DiGraph()
+    for i in range(0, 5):
+        graph.add_node(i,(3, 5))
+    graph.add_edge(0, 1, 10)
+    graph.add_edge(0, 2, 3)
+    graph.add_edge(2, 3, 4)
+    graph.add_edge(3, 1, 1)
+    graph_algo = GraphAlgo(graph)
+    graph_algo.save_to_json(r'C:\Users\Mayan\PycharmProjects\Ex3\data\new')
