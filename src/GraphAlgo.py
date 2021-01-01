@@ -9,7 +9,6 @@ import GraphInterface
 from DiGraph import DiGraph
 from GraphAlgoInterface import GraphAlgoInterface
 
-
 class GraphAlgo(GraphAlgoInterface):
 
     def __init__(self, graph: GraphInterface = None):
@@ -30,7 +29,8 @@ class GraphAlgo(GraphAlgoInterface):
                 if node_element.get("id") is not None:
                     key = node_element.get("id")
                     if node_element.get("pos") is not None:
-                        pos = node_element.get("pos")
+                        list = node_element.get("pos").split(",")
+                        pos = (float(list[0]), float(list[1]), float(list[2]))
                         graph.add_node(key, pos)
                     else:
                         graph.add_node(key=key)
@@ -81,7 +81,6 @@ class GraphAlgo(GraphAlgoInterface):
         with open(file_name, 'w') as file:
             json.dump(json_dict, file)
             return True
-
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
@@ -142,7 +141,7 @@ class GraphAlgo(GraphAlgoInterface):
         flag = False
         reversed = DiGraph()
         nodes = self.graph.get_all_v()
-        if len(nodes) == 0:
+        if len(nodes) == 0 or id1 not in nodes.keys():
             return []
         q = deque()
         q.append(id1)
@@ -172,13 +171,6 @@ class GraphAlgo(GraphAlgoInterface):
                     r_connections_list.append(curr_ni)
         return list(set(connections_list) & set(r_connections_list))
 
-
-
-
-
-
-
-
     def connected_components(self) -> List[list]:
         if self.graph is None:
             return []
@@ -195,6 +187,5 @@ class GraphAlgo(GraphAlgoInterface):
 
     def plot_graph(self) -> None:
         pass
-
 
 
