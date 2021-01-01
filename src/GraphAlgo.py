@@ -1,3 +1,5 @@
+from builtins import list
+from collections import deque
 from typing import List
 from queue import PriorityQueue
 import json
@@ -6,7 +8,6 @@ import json
 import GraphInterface
 from DiGraph import DiGraph
 from GraphAlgoInterface import GraphAlgoInterface
-from node_data import NodeData
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -18,24 +19,80 @@ class GraphAlgo(GraphAlgoInterface):
         return self.graph
 
     def load_from_json(self, file_name: str) -> bool:
-        with open(file_name, 'r') as file:
-            data = json.load(file)
-            print(data)
+        with open(file_name) as json_file:
+            data = json.load(json_file)
+        nodes = data["Nodes"]
+        edges = data["Edges"]
+        graph = DiGraph()
+
+        if nodes is not None and edges is not None:
+            for node_element in nodes:
+                if node_element.get("id") is not None:
+                    key = node_element.get("id")
+                    if node_element.get("pos") is not None:
+                        pos = node_element.get("pos")
+                        graph.add_node(key, pos)
+                    else:
+                        graph.add_node(key=key)
+                else:
+                    return False
+            for edge_element in edges:
+                if edge_element.get("src") is not None and edge_element.get("w") is not None and edge_element.get("dest") is not None:
+                    src = edge_element.get("src")
+                    weight = edge_element.get("w")
+                    dest = edge_element.get("dest")
+                    graph.add_edge(src, dest, weight);
+                else:
+                    return False
+            self.graph = graph
+        else:
+            return False
+        return True
 
     def save_to_json(self, file_name: str) -> bool:
-        pass
+        nodes_list = []
+        edges_list = []
+        json_dict = dict()
+        all_nodes = self.graph.get_all_v().values()
+        for node in all_nodes:
+            curr_node = dict()
+            pos_tup = node.get_pos()
+            pos_str = ""
+            for i in pos_tup:
+                pos_str += str(i)
+                pos_str += ","
+            pos_str = pos_str[:-1]
+            curr_node["pos"] = pos_str
+            curr_node["id"] = node.get_key()
+            nodes_list.append(curr_node)
+
+            all_edges_from_node = self.graph.all_out_edges_of_node(node.get_key())
+            for edge in all_edges_from_node.keys():
+                curr_edge = dict()
+                curr_edge["src"] = node.get_key()
+                curr_edge["w"] = all_edges_from_node.get(edge)
+                curr_edge["dest"] = edge
+                edges_list.append(curr_edge)
+        json_dict["Edges"] = edges_list
+        json_dict["Nodes"] = nodes_list
+        with open(file_name, 'w') as file:
+            json.dump(json_dict, file)
+            return True
+
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
-        prev = self.__Dijkstra(id1, id2)
-        path = self.__reconstructPath(prev, id1, id2)
+        if self.graph is None:
+            return [float('inf'), []]
+        prev = self.__dijkstra(id1, id2)
+        path = self.__reconstruct_path(prev, id1, id2)
         if path is None:
             return [float('inf'), []]
         else:
             nodes = self.graph.get_all_v()
-            ans = [nodes[id2].get_tag(), path]
+            ans = (nodes[id2].get_tag(), path)
             return ans
 
-    def __Dijkstra(self, src: int, dest: int):
+    def __dijkstra(self, src: int, dest: int):
         pq = PriorityQueue()
         dist = float('inf')
         visited = set()
@@ -65,7 +122,7 @@ class GraphAlgo(GraphAlgoInterface):
                         pq.put((ni.get_tag(), ni_key))
         return prev
 
-    def __reconstructPath(self, prev: dict, src: int, dest: int):
+    def __reconstruct_path(self, prev: dict, src: int, dest: int):
         path_temp = [dest]
         i = dest
         while prev.get(i) is not None:
@@ -78,22 +135,63 @@ class GraphAlgo(GraphAlgoInterface):
         else:
             return None
 
-
-
     def connected_component(self, id1: int) -> list:
-        pass
+        flag = False
+        reversed = DiGraph()
+        nodes = self.graph.get_all_v()
+        if len(nodes) == 0:
+            return []
+        q = deque()
+        q.append(id1)
+        connected = {id1: True}
+        connections_list = [id1]
+        reversed.add_node(id1)
+        while len(q) != 0:
+            curr = q.popleft()
+            curr_edges = self.graph.all_out_edges_of_node(curr)
+            for curr_ni in curr_edges.keys():
+                reversed.add_node(curr_ni)
+                reversed.add_edge(curr_ni, curr, curr_edges.get(curr_ni))
+                if connected.get(curr_ni) is None:
+                    q.append(curr_ni)
+                    connected[curr_ni] = True
+                    connections_list.append(curr_ni)
+        q.append(id1)
+        r_connected = {id1: True}
+        r_connections_list = [id1]
+        while len(q) != 0:
+            curr = q.popleft()
+            curr_edges = reversed.all_out_edges_of_node(curr)
+            for curr_ni in curr_edges.keys():
+                if r_connected.get(curr_ni) is None:
+                    q.append(curr_ni)
+                    r_connected[curr_ni] = True
+                    r_connections_list.append(curr_ni)
+        return list(set(connections_list) & set(r_connections_list))
+
+
+
+
+
+
+
 
     def connected_components(self) -> List[list]:
-        pass
+        if self.graph is None:
+            return []
+        nodes = self.graph.get_all_v()
+        keys = nodes.keys()
+        ans = []
+        connected = []
+        for key in keys:
+            if key not in connected:
+                key_connected = self.connected_component(key)
+                connected.extend(key_connected)
+                ans.append(key_connected)
+        return ans
 
     def plot_graph(self) -> None:
         pass
 
-
-if __name__ == '__main__':
-    string = "data\\A5"
-    gg = DiGraph()
-    g = GraphAlgo(gg)
-    g.load_from_json(string)
 
 
