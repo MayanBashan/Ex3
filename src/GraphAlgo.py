@@ -33,7 +33,7 @@ class GraphAlgo(GraphAlgoInterface):
                         pos = (float(list[0]), float(list[1]), float(list[2]))
                         graph.add_node(key, pos)
                     else:
-                        graph.add_node(key=key)
+                        graph.add_node(node_id=key)
                 else:
                     return False
             for edge_element in edges:
@@ -41,7 +41,7 @@ class GraphAlgo(GraphAlgoInterface):
                     src = edge_element.get("src")
                     weight = edge_element.get("w")
                     dest = edge_element.get("dest")
-                    graph.add_edge(src, dest, weight);
+                    graph.add_edge(src, dest, weight)
                 else:
                     return False
             self.graph = graph
@@ -58,14 +58,12 @@ class GraphAlgo(GraphAlgoInterface):
             curr_node = dict()
             pos_tup = node.get_pos()
             pos_str = ""
-            if pos_tup is None:
-                pos_str = "-1,-1,-1"
-            else:
+            if pos_tup is not None:
                 for i in pos_tup:
                     pos_str += str(i)
                     pos_str += ","
                 pos_str = pos_str[:-1]
-            curr_node["pos"] = pos_str
+                curr_node["pos"] = pos_str
             curr_node["id"] = node.get_key()
             nodes_list.append(curr_node)
 
@@ -185,7 +183,5 @@ class GraphAlgo(GraphAlgoInterface):
                 ans.append(key_connected)
         return ans
 
-    def plot_graph(self) -> None:
-        pass
-
-
+    # def plot_graph(self) -> None:
+    #     pass
