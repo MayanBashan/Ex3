@@ -58,10 +58,13 @@ class GraphAlgo(GraphAlgoInterface):
             curr_node = dict()
             pos_tup = node.get_pos()
             pos_str = ""
-            for i in pos_tup:
-                pos_str += str(i)
-                pos_str += ","
-            pos_str = pos_str[:-1]
+            if pos_tup is None:
+                pos_str = "-1,-1,-1"
+            else:
+                for i in pos_tup:
+                    pos_str += str(i)
+                    pos_str += ","
+                pos_str = pos_str[:-1]
             curr_node["pos"] = pos_str
             curr_node["id"] = node.get_key()
             nodes_list.append(curr_node)
@@ -86,7 +89,7 @@ class GraphAlgo(GraphAlgoInterface):
         prev = self.__dijkstra(id1, id2)
         path = self.__reconstruct_path(prev, id1, id2)
         if path is None:
-            return [float('inf'), []]
+            return (float('inf'), [])
         else:
             nodes = self.graph.get_all_v()
             ans = (nodes[id2].get_tag(), path)
