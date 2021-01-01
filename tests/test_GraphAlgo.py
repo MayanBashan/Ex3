@@ -5,7 +5,7 @@ from GraphAlgo import GraphAlgo
 
 
 class TestGraphAlgo(TestCase):
-    """Test Class for DiGraph
+    """Test Class for GraphAlgo
     List of all the test in this Test class:
     - test_get_graph - checks if the simple method get_graph returns the algo_graph graph
     - test_saveNload_to_json - creates a graph with 6 nodes and 11 edges, save it to a file, load it back to another graph algo and see if both graph's are equal
