@@ -50,8 +50,6 @@ class TestGraphAlgo(TestCase):
         graph_algo2 = GraphAlgo()
         graph_algo2.load_from_json(r'..\data\new')
         self.assertTrue(graph_algo.graph.__eq__(graph_algo2.graph))
-        graph = DiGraph()
-        graph_algo3 = GraphAlgo(graph)
 
     def test_shortest_path1(self):
         graph = DiGraph()

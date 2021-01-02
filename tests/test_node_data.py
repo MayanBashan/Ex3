@@ -44,10 +44,10 @@ class TestNodeData(TestCase):
 
         # Test 1.7
         node1.add_edge_to_node(2,6.5)
-        expected = {2 : 6.5}
+        expected = {2 : (2,6.5)}
         self.assertEqual(node1.get_edges_to_node(), expected)
         node2.add_edge_from_node(1,6.5)
-        expected = {1 : 6.5}
+        expected = {1 : (1,6.5)}
         self.assertEqual(node2.get_edges_from_node(), expected)
 
         # Test 1.8

@@ -76,7 +76,8 @@ class GraphAlgo(GraphAlgoInterface):
         edges_list = []
         json_dict = dict()
         all_nodes = self.graph.get_all_v().values()
-        for node in all_nodes:
+        for node_tup in all_nodes:
+            node = node_tup[1]
             curr_node = dict()
             pos_tup = node.get_pos()
             pos_str = ""
@@ -93,7 +94,7 @@ class GraphAlgo(GraphAlgoInterface):
             for edge in all_edges_from_node.keys():
                 curr_edge = dict()
                 curr_edge["src"] = node.get_key()
-                curr_edge["w"] = all_edges_from_node.get(edge)
+                curr_edge["w"] = all_edges_from_node.get(edge)[1]
                 curr_edge["dest"] = edge
                 edges_list.append(curr_edge)
         json_dict["Edges"] = edges_list
@@ -122,7 +123,7 @@ class GraphAlgo(GraphAlgoInterface):
             return (float('inf'), [])
         else:
             nodes = self.graph.get_all_v()
-            ans = (nodes[id2].get_tag(), path)
+            ans = (nodes.get(id2)[1].get_tag(), path)
             return ans
 
     def __dijkstra(self, src: int, dest: int):
@@ -153,16 +154,16 @@ class GraphAlgo(GraphAlgoInterface):
         visited = set()
         prev = dict()
         nodes = self.graph.get_all_v()
-        nodes[src].set_tag(0)
-        pq.put((nodes[src].get_tag(), src))
+        nodes[src][1].set_tag(0)
+        pq.put((nodes[src][1].get_tag(), src))
         while len(pq.queue) != 0:
             curr_key = pq.get(0)[1]
-            curr = nodes[curr_key]
+            curr = nodes.get(curr_key)[1]
             if curr_key not in visited and curr_key != dest:
                 visited.add(curr_key)
-                curr_ni = nodes[curr_key].get_edges_from_node().keys()
+                curr_ni = nodes.get(curr_key)[1].get_edges_from_node().keys()
                 for ni_key in curr_ni:
-                    ni = nodes[ni_key]
+                    ni = nodes.get(ni_key)[1]
                     if ni_key not in visited:
                         ni_dist_from_src = curr.get_tag() + curr.get_edge_weight(ni_key)
                         if ni_dist_from_src < dist:
@@ -224,7 +225,7 @@ class GraphAlgo(GraphAlgoInterface):
             curr_edges = self.graph.all_out_edges_of_node(curr)
             for curr_ni in curr_edges.keys():
                 reversed.add_node(curr_ni)
-                reversed.add_edge(curr_ni, curr, curr_edges.get(curr_ni))
+                reversed.add_edge(curr_ni, curr, curr_edges.get(curr_ni)[1])
                 if connected.get(curr_ni) is None:
                     q.append(curr_ni)
                     connected[curr_ni] = True

@@ -60,7 +60,7 @@ class TestDiGraph(unittest.TestCase):
         for i in range(1, 5):
             graph.add_node(i)
             expected_dict[i] = graph.nodes.get(i)
-        self.assertEqual(graph.get_all_v() ,expected_dict)
+        self.assertEqual(graph.get_all_v(),expected_dict)
 
 
     def test_all_in_edges_of_node(self):
@@ -71,7 +71,7 @@ class TestDiGraph(unittest.TestCase):
         graph.add_edge(2, 1, 5)
         graph.add_edge(2, 3, 1)
         graph.add_edge(4, 2, 7.5)
-        expected_dict = {1 : 2, 4 : 7.5}
+        expected_dict = {1 : (1,2), 4 : (4,7.5)}
         self.assertEqual(graph.all_in_edges_of_node(2), expected_dict)
         self.assertEqual(graph.all_in_edges_of_node(7), {})
 
@@ -83,7 +83,7 @@ class TestDiGraph(unittest.TestCase):
         graph.add_edge(2, 1, 5)
         graph.add_edge(2, 3, 1)
         graph.add_edge(4, 2, 7.5)
-        expected_dict = {1 : 5, 3 : 1}
+        expected_dict = {1 : (1 ,5), 3 : (3, 1)}
         self.assertEqual(graph.all_out_edges_of_node(2), expected_dict)
         self.assertEqual(graph.all_out_edges_of_node(3), {})
 
@@ -144,7 +144,7 @@ class TestDiGraph(unittest.TestCase):
         self.assertFalse(bool)
         bool = graph.remove_edge(1,2)
         self.assertTrue(bool)
-        expected_dict = {4 : 3}
+        expected_dict = {4 : (4, 3)}
         self.assertEqual(graph.all_out_edges_of_node(1), expected_dict)
 
 
