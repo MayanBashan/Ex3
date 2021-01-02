@@ -24,9 +24,10 @@ In order to gain more specific imformation on how to run this project please vie
 ![](data/dw_graph_image.png)
  
 **This graph contains 6 nodes and 9 edges.**
-- isConnected() function will return **false** - the graph is not a strongly connected graph (no path from node 5 to any other node).<br />
-- shortestPathDist method between node 0 to node 5 will return **14** (4+2+2+6).<br />
-- shortestPath method between node 0 to node 5 will return the list **{0,1,3,4,5}**.<br />
+- connected_component() with 1 as input will return the list [0,1,2,3,4] (we can get from each node in the list to each other node from the list).<br />
+- connected_components() function will return [[5],[0,1,2,3,4]] - no path from node 5 to any other node, and if we take any 2 nodes from [0,1,2,3,4], <br />
+  there will be a path from first node to second node, and a path from second node to first node.<br />
+- shortest_path() method between node 0 to node 5 will return a dict - {**14** , [0,1,3,4,5]} (14=4+2+2+6).<br />
 Do notice that the shortest path depends on the sum of the weights of the edges between the 2 nodes
 and not on the sum of the nodes between 2 nodes.
 
