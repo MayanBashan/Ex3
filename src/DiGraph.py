@@ -1,18 +1,17 @@
 from GraphInterface import GraphInterface
 from node_data import NodeData
 
-"""
-This class implements GraphInterface which is a weighted directed graph with the following class variables:
-    - nodes: a nodes dictionary which maps each node to his key int the following way -> {node_key: node},
-    when each node stores his neighbors (from both incoming edges and outgoing edges) 
-    - mc: number of actions preformed on the the graph.
-    - edge_size: number of edges in the graph
-    *Note* - The implementation of the edges is in the NodeData class, when each node stores is 
-    incoming (directed to node) and outgoing (directed from node) edges. 
-"""
-
 
 class DiGraph(GraphInterface):
+    """
+    This class implements GraphInterface which is a weighted directed graph with the following class variables:
+        - nodes: a nodes dictionary which maps each node to his key int the following way -> {node_key: node},
+        when each node stores his neighbors (from both incoming edges and outgoing edges)
+        - mc: number of actions preformed on the the graph.
+        - edge_size: number of edges in the graph
+        *Note* - The implementation of the edges is in the NodeData class, when each node stores is
+        incoming (directed to node) and outgoing (directed from node) edges.
+    """
 
     def __init__(self):
         """
