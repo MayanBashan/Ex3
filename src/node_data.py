@@ -1,20 +1,19 @@
 
-"""
-This class represents the nodes in a weighted directed graph with the following calss variables:
-    - info - the info stored in this node
-    - tag - the tag assigned to this node
-    - key - the unique key associated with this node
-    - edges_from_node - a dictionary which stores all the edges which are directed from this node.
-    for example, if there is an edge from this node to other node with weight of 7.3 then the dictionary
-    will map the following {other_node_id : 7.3}.
-    - edges_to_node - a dictionary which stores all the edges which are directed to this node.
-    for example, if there is an edge from this node to other node with weight of 3.8 then the dictionary
-    will map the following {other_node_id : 3.8}.
-    - pos - a tuple representing the geographic position of this node.
-"""
-
 
 class NodeData:
+    """
+    This class represents the nodes in a weighted directed graph with the following calss variables:
+        - info - the info stored in this node
+        - tag - the tag assigned to this node
+        - key - the unique key associated with this node
+        - edges_from_node - a dictionary which stores all the edges which are directed from this node.
+        for example, if there is an edge from this node to other node with weight of 7.3 then the dictionary
+        will map the following {other_node_id : 7.3}.
+        - edges_to_node - a dictionary which stores all the edges which are directed to this node.
+        for example, if there is an edge from this node to other node with weight of 3.8 then the dictionary
+        will map the following {other_node_id : 3.8}.
+        - pos - a tuple representing the geographic position of this node.
+    """
 
     def __init__(self, key: int, info: str = None, tag: float = 0, pos: tuple = None):
         """
@@ -47,7 +46,7 @@ class NodeData:
         """
         self.edges_to_node[ni_key] = weight
 
-    def get_edges_from_node(self):
+    def get_edges_from_node(self) -> dict:
         """
         Returns a dictionary holding all the edges which are directed from this node by mapping them
         in pairs in the following way (ni_key, edge_weight), by returning the edges_from_node dictionary.
@@ -56,7 +55,7 @@ class NodeData:
         """
         return self.edges_from_node
 
-    def get_edges_to_node(self):
+    def get_edges_to_node(self) -> dict:
         """
         Returns a dictionary holding all the edges which are directed to this node by mapping them
         in pairs in the following way (ni_key, edge_weight), by returning the edges_to_node dictionary.
@@ -65,7 +64,7 @@ class NodeData:
         """
         return self.edges_to_node
 
-    def get_edge_weight(self, ni_key: int):
+    def get_edge_weight(self, ni_key: int) -> float:
         """
         Returns the weight of the edge from this node to ni_key (node -> ni_key) by retrieving it from
         the edges_from_node dictionary.
@@ -74,7 +73,7 @@ class NodeData:
         """
         return self.edges_from_node.get(ni_key)
 
-    def get_key(self):
+    def get_key(self) -> int:
         """
         Returns the key of this node by returning self.key
         @param
@@ -82,7 +81,7 @@ class NodeData:
         """
         return self.key
 
-    def get_info(self):
+    def get_info(self) -> str:
         """
         Returns the info stored in this node by returning self.info
         @param
@@ -98,7 +97,7 @@ class NodeData:
         """
         self.info = info
 
-    def get_tag(self):
+    def get_tag(self) -> float:
         """
         Returns the tag of this node by returning self.tag
         @param
@@ -114,7 +113,7 @@ class NodeData:
         """
         self.tag = tag
 
-    def get_pos(self):
+    def get_pos(self) -> tuple:
         """
         Returns the geographic location of this node by returning self.pos
         @param
