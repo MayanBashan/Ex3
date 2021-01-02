@@ -82,7 +82,9 @@ class GraphAlgo(GraphAlgoInterface):
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         if self.graph is None:
-            return [float('inf'), []]
+            return (float('inf'), [])
+        if id1 not in self.graph.get_all_v() or id2 not in self.graph.get_all_v():
+            return (float('inf'), [])
         prev = self.__dijkstra(id1, id2)
         path = self.__reconstruct_path(prev, id1, id2)
         if path is None:
