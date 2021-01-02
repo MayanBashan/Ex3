@@ -21,7 +21,7 @@ In order to gain more specific imformation on how to run this project please vie
  
 ## Example:
  
-![dw_graph_image](https://user-images.githubusercontent.com/68948784/102025281-8a0af380-3d9f-11eb-8662-b426537caa95.png)
+![](data/dw_graph_image.png)
  
 **This graph contains 6 nodes and 9 edges.**
 - isConnected() function will return **false** - the graph is not a strongly connected graph (no path from node 5 to any other node).<br />
