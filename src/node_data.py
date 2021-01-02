@@ -34,7 +34,7 @@ class NodeData:
         @param weight - the weight of the edge
         @return
         """
-        self.edges_from_node[ni_key] = (ni_key, weight)
+        self.edges_from_node[ni_key] = weight
 
     def add_edge_to_node(self, ni_key: int, weight: float):
         """
@@ -44,7 +44,7 @@ class NodeData:
         @param weight - the weight of the edge
         @return
         """
-        self.edges_to_node[ni_key] = (ni_key, weight)
+        self.edges_to_node[ni_key] = weight
 
     def get_edges_from_node(self) -> dict:
         """
@@ -71,7 +71,7 @@ class NodeData:
         @param
         @return the weight of the edge node->ni_key
         """
-        return self.edges_from_node.get(ni_key)[1]
+        return self.edges_from_node.get(ni_key)
 
     def get_key(self) -> int:
         """

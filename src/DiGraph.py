@@ -56,7 +56,7 @@ class DiGraph(GraphInterface):
         """
         if id1 not in self.nodes.keys():
             return {}
-        return self.nodes.get(id1)[1].get_edges_to_node()
+        return self.nodes.get(id1).get_edges_to_node()
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         """
@@ -68,7 +68,7 @@ class DiGraph(GraphInterface):
         """
         if id1 not in self.nodes.keys():
             return {}
-        return self.nodes.get(id1)[1].get_edges_from_node()
+        return self.nodes.get(id1).get_edges_from_node()
 
     def get_mc(self) -> int:
         """
@@ -94,8 +94,8 @@ class DiGraph(GraphInterface):
         elif id2 in self.all_out_edges_of_node(id1).keys():
             return False
         else:
-            self.nodes.get(id1)[1].add_edge_from_node(id2, weight)
-            self.nodes.get(id2)[1].add_edge_to_node(id1, weight)
+            self.nodes.get(id1).add_edge_from_node(id2, weight)
+            self.nodes.get(id2).add_edge_to_node(id1, weight)
             self.mc += 1
             self.edge_size += 1
             return True
@@ -112,7 +112,7 @@ class DiGraph(GraphInterface):
             return False
         else:
             new_node = NodeData(key=node_id, pos=pos)
-            self.nodes[node_id] = (node_id, new_node)
+            self.nodes[node_id] = new_node
             self.mc += 1
             return True
 
@@ -156,8 +156,8 @@ class DiGraph(GraphInterface):
         elif node_id2 not in self.all_out_edges_of_node(node_id1).keys():
             return False
         else:
-            del self.nodes.get(node_id1)[1].get_edges_from_node()[node_id2]
-            del self.nodes.get(node_id2)[1].get_edges_to_node()[node_id1]
+            del self.nodes.get(node_id1).get_edges_from_node()[node_id2]
+            del self.nodes.get(node_id2).get_edges_to_node()[node_id1]
             self.edge_size -= 1
             self.mc += 1
             return True
