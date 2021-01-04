@@ -123,10 +123,13 @@ class TestDiGraph(unittest.TestCase):
         self.assertTrue(bool)
         self.assertEqual(graph.v_size(),5)
         bool = graph.remove_node(1)
+        self.assertEqual(graph.v_size(),4)
         self.assertTrue(bool)
         bool = graph.remove_node(1)
+        self.assertEqual(graph.v_size(),4)
         self.assertFalse(bool)
         bool = graph.remove_node(5)
+        self.assertEqual(graph.v_size(),4)
         self.assertFalse(bool)
 
     def test_add_remove_edge(self):
@@ -134,16 +137,24 @@ class TestDiGraph(unittest.TestCase):
         for i in range(1, 5):
             graph.add_node(i)
         bool = graph.add_edge(1, 2, 2)
+        self.assertEqual(graph.edge_size, 1)
         graph.add_edge(1, 4, 3)
+        self.assertEqual(graph.edge_size, 2)
         self.assertTrue(bool)
         bool = graph.add_edge(6,1,30)
         self.assertFalse(bool)
         bool = graph.add_edge(1,1,2)
         self.assertFalse(bool)
+        self.assertEqual(graph.edge_size, 2)
         bool = graph.remove_edge(1,1)
         self.assertFalse(bool)
+        self.assertEqual(graph.edge_size, 2)
         bool = graph.remove_edge(1,2)
         self.assertTrue(bool)
+        self.assertEqual(graph.edge_size, 1)
+        bool = graph.remove_edge(1, 5)
+        self.assertFalse(bool)
+        self.assertEqual(graph.edge_size, 1)
         expected_dict = {4 : 3}
         self.assertEqual(graph.all_out_edges_of_node(1), expected_dict)
 
