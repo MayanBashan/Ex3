@@ -13,12 +13,12 @@ The graph was realized by using dictionary structure, and the operations were wr
 
 ## How to run
 In order to gain more specific imformation on how to run this project please view the attached wiki pages:
-- [How to run](https://github.com/Yuval-Moshe/Ex2/wiki/How-To-Run---Weighted-&-Directed-Graph)
+- [How to run](https://github.com/MayanBashan/Ex3/wiki/How-To-Run-Weighted-&-Directed-Graph)
 
 ## Definitions
  * *directed graph - a set of nodes that are connected together, where all the edges are directed from one vertex to another*
  * *weighted graph - edges of the graph are holding some sort of cost (time to cross for example)*
- 
+  
 ## Example:
  
 ![](data/dw_graph_image.png)
