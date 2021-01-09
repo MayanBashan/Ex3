@@ -4,12 +4,14 @@
 
 This project is divided into 2 main parts:<br />
 
-<ins>First part</ins> - Implementation of a directed weighted graph with the following classes: <br />
+#### <ins>First part</ins> -
+Implementation of a directed weighted graph with the following classes: <br />
 NodeData - implements the node_data interface, which is the interface of nodes in an directed weighted graph. <br />
 DiGraph - implements the GraphInterface interface, which represents the graph itself. <br />
 GraphAlgo - implements the GraphAlgoInterface interface, which allows performing algorithmic queries on a specific graph. <br />
 The graph was realized by using dictionary structure, and the operations were written by realizing Diexera algorithm (please see explanation in the algorithm itself). <br />
-<ins>Second part</ins> - in this part we compared our implementation performances, to [NetworkX](https://networkx.org/) performances (*NetworkX is a python package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks).
+#### <ins>Second part</ins> -
+in this part we compared our implementation performances, to [NetworkX](https://networkx.org/) performances (*NetworkX is a python package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks).
 
 ## How to run
 In order to gain more specific imformation on how to run this project please view the attached wiki pages:
