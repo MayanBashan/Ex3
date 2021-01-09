@@ -23,6 +23,9 @@ class GraphAlgo(GraphAlgoInterface):
         Constructor
         """
         self.graph = graph
+        if graph is not None:
+            self.__build_reversed()
+            self.graph_mc = self.graph.get_mc()
 
     def get_graph(self) -> GraphInterface:
         """
@@ -65,6 +68,8 @@ class GraphAlgo(GraphAlgoInterface):
                 else:
                     return False
             self.graph = graph
+            self.__build_reversed()
+            self.graph_mc = self.graph.get_mc()
         else:
             return False
         return True
@@ -75,6 +80,8 @@ class GraphAlgo(GraphAlgoInterface):
         :param file_name
         :return: true if the graph was successfully saved to the file, false otherwise.
         """
+        if self.graph is None:
+            return False
         nodes_list = []
         edges_list = []
         json_dict = dict()
@@ -213,21 +220,22 @@ class GraphAlgo(GraphAlgoInterface):
         :param id1: key of the node
         :return: list - of all nodes in the connected component of node id1
         """
-        reversed = DiGraph()
+        if self.graph is None:
+            return []
         nodes = self.graph.get_all_v()
         if len(nodes) == 0 or id1 not in nodes.keys():
             return []
+        if self.graph_mc != self.graph.get_mc():
+            self.__build_reversed()
+            self.graph_mc = self.graph.get_mc()
         q = deque()
         q.append(id1)
         connected = {id1: True}
         connections_list = [id1]
-        reversed.add_node(id1)
         while len(q) != 0:
             curr = q.popleft()
             curr_edges = self.graph.all_out_edges_of_node(curr)
             for curr_ni in curr_edges.keys():
-                reversed.add_node(curr_ni)
-                reversed.add_edge(curr_ni, curr, curr_edges.get(curr_ni))
                 if connected.get(curr_ni) is None:
                     q.append(curr_ni)
                     connected[curr_ni] = True
@@ -237,7 +245,7 @@ class GraphAlgo(GraphAlgoInterface):
         r_connections_list = [id1]
         while len(q) != 0:
             curr = q.popleft()
-            curr_edges = reversed.all_out_edges_of_node(curr)
+            curr_edges = self.reversed.all_out_edges_of_node(curr)
             for curr_ni in curr_edges.keys():
                 if r_connected.get(curr_ni) is None:
                     q.append(curr_ni)
@@ -276,6 +284,8 @@ class GraphAlgo(GraphAlgoInterface):
         so that the un-positioned nodes of this graph will be equaly divided  in to the 4 quarter of this graph's area
         in order to create the possible best elegant representation of this graph.
         """
+        if self.graph is None:
+            return None
         nodes = self.graph.get_all_v()
         axis_return = self.__set_axis()
         un_positioned = axis_return[4]
@@ -380,3 +390,15 @@ class GraphAlgo(GraphAlgoInterface):
                 max_x = max_x + range_x
                 max_y = max_y + range_y
         return [min_x, max_x, min_y, max_y, un_positioned]
+
+    def __build_reversed(self) -> DiGraph():
+        reversed = DiGraph()
+        nodes = self.graph.get_all_v()
+        for node in nodes.values():
+            node_key = node.get_key()
+            reversed.add_node(node_key)
+            edges = self.graph.all_out_edges_of_node(node_key)
+            for ni in self.graph.all_out_edges_of_node(node_key).keys():
+                reversed.add_node(ni)
+                reversed.add_edge(ni, node_key, edges[ni])
+        self.reversed = reversed
