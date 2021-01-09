@@ -194,7 +194,7 @@ class GraphAlgo(GraphAlgoInterface):
             path_temp.append(prev.get(i))
             i = prev.get(i)
 
-        if len(path_temp) != 0 and path_temp[len(path_temp)-1] is src:
+        if len(path_temp) != 0 and path_temp[len(path_temp) - 1] is src:
             path_temp.reverse()
             return path_temp
         else:
