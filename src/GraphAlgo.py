@@ -1,11 +1,14 @@
 from builtins import list
 from collections import deque
+from random import random
 from typing import List
 from queue import PriorityQueue
 import json
+from matplotlib.patches import ConnectionPatch
 import GraphInterface
 from DiGraph import DiGraph
 from GraphAlgoInterface import GraphAlgoInterface
+import matplotlib.pyplot as plt
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -264,5 +267,116 @@ class GraphAlgo(GraphAlgoInterface):
                 ans.append(key_connected)
         return ans
 
-    # def plot_graph(self) -> None:
-    #     pass
+
+    def plot_graph(self) -> None:
+        """
+        This function plots the current DiGraph of this GraphAlgo using the matplotlib library, by first calling the
+        private set_axis function (find explanation above the function) and then going over all the un-positioned
+        nodes in the graph, and finding them a place based on the current other un-positioned nodes location,
+        so that the un-positioned nodes of this graph will be equaly divided  in to the 4 quarter of this graph's area
+        in order to create the possible best elegant representation of this graph.
+        """
+        nodes = self.graph.get_all_v()
+        axis_return = self.__set_axis()
+        un_positioned = axis_return[4]
+        min_x = axis_return[0]
+        max_x = axis_return[1]
+        min_y = axis_return[2]
+        max_y = axis_return[3]
+        un_pos_quarter = [0, 0, 0, 0]
+        ax = plt.axes()
+        for node in un_positioned:
+            quarter = un_pos_quarter.index(min(un_pos_quarter))
+            un_pos_quarter[quarter] += 1
+            if quarter == 0:
+                x_min_range = min_x
+                x_max_range = (min_x + max_x)/2
+                y_min_range = min_y
+                y_max_range = (min_y + max_y)/2
+            elif quarter == 1:
+                x_min_range = min_x
+                x_max_range = (min_x + max_x)/2
+                y_min_range = (min_y + max_y)/2
+                y_max_range = max_y
+            elif quarter == 2:
+                x_min_range = (min_x + max_x)/2
+                x_max_range = max_x
+                y_min_range = (min_y + max_y)/2
+                y_max_range = max_y
+            else:
+                x_min_range = (min_x + max_x)/2
+                x_max_range = max_x
+                y_min_range = min_y
+                y_max_range = (min_y + max_y)/2
+            x = x_min_range + random()*(x_max_range-x_min_range)
+            y = y_min_range + random()*(y_max_range-y_min_range)
+            node.set_pos((x, y, 0))
+        for node in nodes.values():
+            for ni_key in self.graph.all_out_edges_of_node(node.get_key()).keys():
+                ni = nodes[ni_key]
+                curr_pos = (node.get_pos()[0], node.get_pos()[1])
+                ni_pos = (ni.get_pos()[0], ni.get_pos()[1])
+                coordsA = "data"
+                coordsB = "data"
+                con = ConnectionPatch(curr_pos, ni_pos, coordsA, coordsB,
+                                      arrowstyle="-|>", shrinkA=5, shrinkB=5,
+                                      mutation_scale=15, fc="w")
+                ax.plot([curr_pos[0], ni_pos[0]], [curr_pos[1], ni_pos[1]], "o")
+                ax.add_artist(con)
+        plt.xlabel("X Axis")
+        plt.ylabel("Y Axis")
+        plt.title("Graph Plot - Ex3")
+        plt.show()
+
+    def __set_axis(self) -> list:
+        nodes = self.graph.get_all_v()
+        max_y = float('-inf')
+        min_y = float('inf')
+        max_x = float('-inf')
+        min_x = float('inf')
+        un_positioned = []
+        for node in nodes.values():
+            if node.get_pos() is None:
+                un_positioned.append(node)
+            else:
+                x = node.get_pos()[0]
+                y = node.get_pos()[1]
+                curr_x = float(node.get_pos()[0])
+                curr_y = float(node.get_pos()[1])
+                max_x = max(max_x, curr_x)
+                min_x = min(min_x, curr_x)
+                max_y = max(max_y, curr_y)
+                min_y = min(min_y, curr_y)
+        if len(un_positioned) == len(nodes):
+            min_x = min_y = 0
+            max_x = max_y = int(len(nodes)*1.5)
+        elif len(un_positioned)==len(nodes)-1:
+            upper_range = lower_range = int(len(nodes)*1.5)//2
+            min_x = min_x - lower_range
+            min_y = min_y - lower_range
+            max_x = max_x + upper_range
+            max_y = max_y + upper_range
+
+            if min_y < 0:
+                max_y = max_y - min_y
+                min_y = 0
+            if min_x < 0:
+                max_x = max_x - min_x
+                min_x = 0
+        else:
+            if max_x == min_x:
+                range_y = max_y - min_y
+                max_x = max_x + range_y/2
+                min_x = min_x - range_y/2
+            elif max_y == min_y:
+                range_x = max_x - min_x
+                max_y = max_y + range_x/2
+                min_y = min_y - range_x/2
+            else:
+                range_x = (max_x - min_x)/(len(nodes)-len(un_positioned))
+                range_y = (max_y - min_y)/(len(nodes)-len(un_positioned))
+                min_x = min_x - range_x
+                min_y = min_y - range_y
+                max_x = max_x + range_x
+                max_y = max_y + range_y
+        return [min_x, max_x, min_y, max_y, un_positioned]
