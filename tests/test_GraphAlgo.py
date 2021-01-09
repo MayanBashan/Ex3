@@ -17,6 +17,9 @@ class TestGraphAlgo(TestCase):
                                   removes 2 edges - now connected component of 2 -> return: [2,3]
     - test_connected_component2 - adding 5 nodes and connected them all, now connected component of 2 -> reurns all nodes: [0,1,2,3,4]
     - test_connected_component3 - checks connected component for a node 1 when graph is empty, and when there is no node 1 in graph: returns []
+    - test_connected_component4 - adding 5 nodes: add 7 edges, when node 4 is not connected to any other node, checks connected component on node 4 -> return [4]
+                                  checks connected_component on node 2 -> returns all nodes except 4: [0,1,2,3]
+                                  connect 4 in both direction edges - now connected component of 2 -> return: [0,1,2,3,4]
     - test_connected_components1 - adding 5 nodes to a graph and some edges, checks if connected_components returns correct list of lists
                                    it checks also when all nodes are connected -> returns [[0,1,2,3,4]]
     - test_connected_components2 - adding 5 nodes to the graph (no edges), checks connected_components - there are 5 -> returns [[0],[1],[2],[3],[4]]
@@ -133,6 +136,25 @@ class TestGraphAlgo(TestCase):
         graph_algo = GraphAlgo(graph)
         self.assertEqual(graph_algo.connected_component(1), [])
 
+    def test_connected_component4(self):
+        graph = DiGraph()
+        for i in range(0, 5):
+            graph.add_node(i)
+        graph.add_edge(0, 1, 10)
+        graph.add_edge(0, 2, 3)
+        graph.add_edge(2, 0, 3)
+        graph.add_edge(2, 3, 4)
+        graph.add_edge(3, 2, 4)
+        graph.add_edge(3, 1, 1)
+        graph.add_edge(1, 3, 1)
+        graph_algo = GraphAlgo(graph)
+        expected = [4]
+        self.assertEqual(graph_algo.connected_component(4), expected)
+        self.assertTrue(set(graph_algo.connected_component(2)) == set([0, 1, 2, 3]))
+        graph.add_edge(2, 4, 3)
+        graph.add_edge(4, 2, 3)
+        self.assertTrue(set(graph_algo.connected_component(2)) == set([0, 1, 2, 3, 4]))
+
     def test_connected_components1(self):
         graph = DiGraph()
         for i in range(0, 5):
@@ -155,6 +177,7 @@ class TestGraphAlgo(TestCase):
         graph_algo = GraphAlgo(graph)
         expected = [[0, 1, 2, 3, 4]]
         self.assertEqual(graph_algo.connected_components(), expected)
+
 
     def test_connected_components2(self):
         graph = DiGraph()
