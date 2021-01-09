@@ -33,4 +33,4 @@ In order to gain more specific imformation on how to run this project please vie
 Do notice that the shortest path depends on the sum of the weights of the edges between the 2 nodes
 and not on the sum of the nodes between 2 nodes.
 
-###### For more information please check the Wiki page
+###### For more information please check the [Wiki](https://github.com/MayanBashan/Ex3/wiki)
