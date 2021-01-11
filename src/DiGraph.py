@@ -1,5 +1,5 @@
-from GraphInterface import GraphInterface
-from node_data import NodeData
+from src.GraphInterface import GraphInterface
+from src.node_data import NodeData
 
 
 class DiGraph(GraphInterface):

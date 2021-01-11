@@ -6,7 +6,7 @@ from typing import List
 from queue import PriorityQueue
 import json
 from matplotlib.patches import ConnectionPatch
-from GraphInterface import GraphInterface
+from src.GraphInterface import GraphInterface
 from src.DiGraph import DiGraph
 from src.GraphAlgoInterface import GraphAlgoInterface
 import matplotlib.pyplot as plt
