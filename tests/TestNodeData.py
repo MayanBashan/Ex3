@@ -1,6 +1,6 @@
 import unittest
 from unittest import TestCase
-from node_data import NodeData
+from src.node_data import NodeData
 
 
 class TestNodeData(TestCase):

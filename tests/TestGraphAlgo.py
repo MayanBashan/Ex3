@@ -1,14 +1,17 @@
 import unittest
 from unittest import TestCase
-from DiGraph import DiGraph
-from GraphAlgo import GraphAlgo
+from src.DiGraph import DiGraph
+from src.GraphAlgo import GraphAlgo
 
 
 class TestGraphAlgo(TestCase):
     """Test Class for GraphAlgo
     List of all the test in this Test class:
     - test_get_graph - checks if the simple method get_graph returns the algo_graph graph
-    - test_saveNload_to_json - creates a graph with 6 nodes and 11 edges, save it to a file, load it back to another graph algo and see if both graph's are equal
+    - test_saveNload_to_json1 - creates a graph with 6 nodes and 11 edges, save it to a file, load it back to another graph algo and see if both graph's are equal
+    - test_saveNload_to_json2 - saves an empty graph a file, load it back to another graph algo and see if both graph's are equal (both empty)
+    - test_load - trying to load to a graph from an empty file - return False, trying yo load to a graph from a file that does not exist - return False
+    - test_save - trying to save a graph to a directory/file that does not exist - return False
     - test_shortest_path1 - a graph which 0 and 1 are connected by an edge from 0 to 1 with weight 10, but the shortest path is 0->2->3->1 with dist 8.
     - test_shortest_path2 - a graph with 5 nodes (0,1,2,3,4) and 2 edges 0->1, 2->3 : shortest_path(0,0) == [0,0] , shortest_path(1,0) == [float(inf), []], shortest_path(2,4) == [float(inf), []], shortest_path(2,7) == [float(inf), []], shortest_path(9,7) == [float(inf), []]
     - test_shortest_path3 - a graph with 30 nodes wich each node i is connected to i+1 by an edge i-> i+1, shortes_path(29,0) == (float('inf'), [])
@@ -33,7 +36,7 @@ class TestGraphAlgo(TestCase):
         graph_algo = GraphAlgo(graph)
         self.assertEqual(graph_algo.get_graph(), graph)
 
-    def test_saveNload_to_json(self):
+    def test_saveNload_to_json1(self):
         graph = DiGraph()
         for i in range(0, 6):
             graph.add_node(i)
@@ -53,6 +56,44 @@ class TestGraphAlgo(TestCase):
         graph_algo2 = GraphAlgo()
         graph_algo2.load_from_json(r'..\data\new')
         self.assertTrue(graph_algo.graph.__eq__(graph_algo2.graph))
+
+    def test_saveNload_to_json2(self):
+        graph = DiGraph()
+        graph_algo = GraphAlgo(graph)
+        flag_save = graph_algo.save_to_json(r'..\data\new_test')
+        graph_algo2 = GraphAlgo()
+        flag_load = graph_algo2.load_from_json(r'..\data\new_test')
+        self.assertTrue(flag_save)
+        self.assertTrue(flag_load)
+        flag_save2 = graph_algo.save_to_json(r'..\data\new_test')
+        self.assertTrue(flag_save2)
+
+    def test_load(self):
+        graph_algo = GraphAlgo()
+        flag = graph_algo.load_from_json(r'..\data\empty_file')
+        self.assertFalse(flag)
+        flag = graph_algo.load_from_json(r'..\data\blabla.json')
+        self.assertFalse(flag)
+
+    def test_save(self):
+        graph = DiGraph()
+        for i in range(0, 6):
+            graph.add_node(i)
+        graph.add_edge(0, 1, 2)
+        graph.add_edge(1, 0, 1)
+        graph.add_edge(1, 3, 3)
+        graph.add_edge(1, 2, 8)
+        graph.add_edge(1, 5, 10)
+        graph.add_edge(2, 1, 1)
+        graph.add_edge(2, 4, 3)
+        graph.add_edge(3, 0, 1)
+        graph.add_edge(3, 1, 1)
+        graph.add_edge(3, 4, 2)
+        graph.add_edge(4, 5, 2)
+        graph_algo = GraphAlgo(graph)
+        flag = graph_algo.save_to_json(r'..\hello\bla.json')
+        self.assertFalse(flag)
+
 
     def test_shortest_path1(self):
         graph = DiGraph()

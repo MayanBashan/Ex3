@@ -1,13 +1,14 @@
 from builtins import list
 from collections import deque
+from json.decoder import JSONDecodeError
 from random import random
 from typing import List
 from queue import PriorityQueue
 import json
 from matplotlib.patches import ConnectionPatch
-import GraphInterface
-from DiGraph import DiGraph
-from GraphAlgoInterface import GraphAlgoInterface
+from GraphInterface import GraphInterface
+from src.DiGraph import DiGraph
+from src.GraphAlgoInterface import GraphAlgoInterface
 import matplotlib.pyplot as plt
 
 
@@ -41,38 +42,52 @@ class GraphAlgo(GraphAlgoInterface):
         :param file_name
         :return: true if successfully loaded and initialized, false otherwise.
         """
-        with open(file_name) as json_file:
-            data = json.load(json_file)
-        nodes = data["Nodes"]
-        edges = data["Edges"]
-        graph = DiGraph()
+        try:
+            with open(file_name, "r") as json_file:
+                try:
+                    data = json.load(json_file)
+                    nodes = data["Nodes"]
+                    edges = data["Edges"]
+                    graph = DiGraph()
 
-        if nodes is not None and edges is not None:
-            for node_element in nodes:
-                if node_element.get("id") is not None:
-                    key = node_element.get("id")
-                    if node_element.get("pos") is not None:
-                        list = node_element.get("pos").split(",")
-                        pos = (float(list[0]), float(list[1]), float(list[2]))
-                        graph.add_node(key, pos)
-                    else:
-                        graph.add_node(node_id=key)
-                else:
+                    if nodes is not None and edges is not None:
+                        for node_element in nodes:
+                            if node_element.get("id") is not None:
+                                key = node_element.get("id")
+                                if node_element.get("pos") is not None:
+                                    list = node_element.get("pos").split(",")
+                                    pos = (float(list[0]), float(list[1]), float(list[2]))
+                                    graph.add_node(key, pos)
+                                else:
+                                    graph.add_node(node_id=key)
+                            else:
+                                return False
+                        for edge_element in edges:
+                            if edge_element.get("src") is not None and edge_element.get(
+                                    "w") is not None and edge_element.get("dest") is not None:
+                                src = edge_element.get("src")
+                                weight = edge_element.get("w")
+                                dest = edge_element.get("dest")
+                                graph.add_edge(src, dest, weight)
+                            else:
+                                return False
+                        self.graph = graph
+                        self.__build_reversed()
+                        self.graph_mc = self.graph.get_mc()
+                    return True
+
+                except IOError as e:
+                    print(e)
                     return False
-            for edge_element in edges:
-                if edge_element.get("src") is not None and edge_element.get("w") is not None and edge_element.get("dest") is not None:
-                    src = edge_element.get("src")
-                    weight = edge_element.get("w")
-                    dest = edge_element.get("dest")
-                    graph.add_edge(src, dest, weight)
-                else:
+
+                except JSONDecodeError as er:
+                    print(er)
                     return False
-            self.graph = graph
-            self.__build_reversed()
-            self.graph_mc = self.graph.get_mc()
-        else:
+
+        except IOError as e:
+            print(e)
             return False
-        return True
+        return False
 
     def save_to_json(self, file_name: str) -> bool:
         """
@@ -108,9 +123,14 @@ class GraphAlgo(GraphAlgoInterface):
                 edges_list.append(curr_edge)
         json_dict["Edges"] = edges_list
         json_dict["Nodes"] = nodes_list
-        with open(file_name, 'w') as file:
-            json.dump(json_dict, file)
+        try:
+            with open(file_name, 'w') as file:
+                json.dump(json_dict, indent=4, fp=file)
             return True
+        except IOError as e:
+            print(e)
+            return False
+        return False
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         """
