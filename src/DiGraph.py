@@ -132,11 +132,13 @@ class DiGraph(GraphInterface):
             if neighbors_to_node:
                 for ni_key in neighbors_to_node:
                     self.remove_edge(ni_key, node_id)
+                    self.mc -=1
             neighbors_from_node = []
             neighbors_from_node.extend(self.all_out_edges_of_node(node_id).keys())
             if neighbors_from_node:
                 for ni_key in neighbors_from_node:
                     self.remove_edge(node_id, ni_key)
+                    self.mc -= 1
             del self.nodes[node_id]
             self.mc += 1
             return True
@@ -171,6 +173,8 @@ class DiGraph(GraphInterface):
                     return False
         return True
 
+    def __repr__(self):
+        return f'Graph: |V|={len(self.nodes)} , |E|={self.edge_size}'
 
 
 

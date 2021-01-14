@@ -111,7 +111,7 @@ class TestDiGraph(unittest.TestCase):
         graph.add_edge(80,81,1)
         self.assertEqual(graph.mc, 106)
         graph.remove_node(2) #remove 3 edges and 1 node
-        self.assertEqual(graph.mc, 110)
+        self.assertEqual(graph.mc, 107)
         out_from_node = graph.all_out_edges_of_node(5)
         dict_keys = {}
         self.assertEqual(out_from_node, dict_keys)
