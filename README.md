@@ -1,17 +1,26 @@
 ## README
+## Authors
+Mayan Bashan & Yuval Moshe 
 
 ## Background <br />
 
-This project is divided into 2 main parts:<br />
+This project is a part of an OOP class in Python which is divided into 2 main parts:<br />
 
-#### <ins>First part</ins> -
-Implementation of a directed weighted graph with the following classes: <br />
-NodeData - represents the a node that is a vertex in a graph a directed weighted graph. <br />
-DiGraph - implements the GraphInterface interface, which represents the graph itself. <br />
-GraphAlgo - implements the GraphAlgoInterface interface, which allows performing algorithmic queries on a specific graph. <br />
+### <ins>First part</ins> - 
+In this part we implemented  a directed weighted graph with the following classes: <br />
+* NodeData - represents the a node that is a vertex in a graph a directed weighted graph. <br />
+* DiGraph - implements the GraphInterface interface, which represents the graph itself. <br />
+* GraphAlgo - implements the GraphAlgoInterface interface, which allows performing algorithmic queries on a specific graph. <br />
 The graph was realized by using dictionary structure, and the operations were written by realizing Dijkstra algorithm (please see explanation in the algorithm itself). <br />
-#### <ins>Second part</ins> -
+### <ins>Second part</ins> -
 In this part we compared our performance, to [NetworkX](https://networkx.org/) performance (*NetworkX is a python package for the creation, manipulation, and study of the structure, dynamics, and functions of complex networks).
+
+   
+## Project Requirments
+- Python 3+ compiler | [Download Python ](https://www.python.org/downloads/)
+- Networkx grpahs python package  | [View Networkx Install Manual ](https://networkx.org/documentation/stable/install.html)
+- matplotlib python package  | [View matplotlib Install Guide ](https://matplotlib.org/3.3.3/users/installing.html)
+- Python IDE (Pycharm, Visual Studio Code, etc') | [Pycharm Download](https://www.jetbrains.com/pycharm/download/) / [Visual Studio Code Download](https://code.visualstudio.com/download)
 
 ## How to run
 In order to gain more specific imformation on how to run this project please view the attached wiki pages:
