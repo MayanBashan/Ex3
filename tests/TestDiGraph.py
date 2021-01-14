@@ -12,7 +12,10 @@ class TestDiGraph(unittest.TestCase):
     - test_all_out_edges_of_node - checks that all_out_edges_of_node method returns all edges that comes out of current node
     - test_get_mc - checks that number of operations that are made on the graph equals to mc of the graph
     - test_add_remove_node - checks if a node is being added or removed from the graph successfully
+                             trying adding a node that already exists in the grap -> returns False.
     - test_add_remove_edge - checks if an edge is being added or removed from the graph successfully
+                             trying adding an edge with negative weight -> returns False.
+                             tryung adding/removing an edge between unexisting nodes -> returns False.
     """
 
     def test_v_size(self):
@@ -157,7 +160,12 @@ class TestDiGraph(unittest.TestCase):
         self.assertEqual(graph.edge_size, 1)
         expected_dict = {4 : 3}
         self.assertEqual(graph.all_out_edges_of_node(1), expected_dict)
-
+        bool = graph.add_edge(2, 4, -3)
+        self.assertFalse(bool)
+        self.assertEqual(graph.edge_size, 1)
+        bool = graph.add_edge(2, 4, 3)
+        self.assertTrue(bool)
+        self.assertEqual(graph.edge_size, 2)
 
 if __name__ == '__main__':
     unittest.main()

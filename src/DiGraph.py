@@ -87,7 +87,7 @@ class DiGraph(GraphInterface):
         @param weight - the weight of the edge
         @return True if and edge from id1 to id2 doesn't exists and a new one is created, false otherwise.
         """
-        if id1 == id2:
+        if id1 == id2 or weight < 0:
             return False
         elif (id1 not in self.nodes.keys()) or (id2 not in self.nodes.keys()):
             return False
